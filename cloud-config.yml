@@ -1,29 +1,38 @@
 #cloud-config
 
 ---
+hostname: <rename>
 coreos:
   etcd2:
-    name: olaria
-    advertise-client-urls: http://146.164.41.7:2379
-    initial-advertise-peer-urls: http://146.164.41.7:2380
+    name: <rename>
+    advertise-client-urls: http://146.164.41.X:2379
+    initial-advertise-peer-urls: http://146.164.41.X:2380
     listen-client-urls: http://0.0.0.0:2379
-    listen-peer-urls: http://$private_ipv4:2380
-    discovery: https://discovery.etcd.io/b38caff2c5b18be6758c0c8fa0a08d26
+    listen-peer-urls: http://146.164.41.X:2380
+    discovery: https://discovery.etcd.io/db9b8da3d131f76a41d02bdeb6f68b1e
   fleet:
-    public-ip: 146.164.41.7
+    public-ip: 146.164.41.X
   flannel:
-    interface: 146.164.41.7
+    interface: 146.164.41.X
   units:
   - name: etcd.service
     command: start
   - name: fleet.service
     command: start
+  - name: sshd.socket
+    command: restart
+    content: |
+      [Socket]
+      ListenStream=22022
+      Accept=yes
 
 users:
-- name: core
+- name: operador
   passwd: $6$rounds=4096$yoPl4RvBFZt$s1cclPwQxYovmXA5ZspiDo28KpqwWovCnXtHjXPG3AHmqtIfTXbIEsLshKNCda6Q/rn5Y3jNSSvIAg6lmDDYs/
   ssh_authorized_keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAm++LnW7g31Cwx7q08uOpr6vQ8wUkMBTxRh/QoB3013DJuolERvTW/HgWFqZ5ZcePSi6s9SvcWMJtk0Q3oZV61lM6+o5Pj3OYCGZUJyWGJChTOhGGo6Mfq0GQZCyl3iuK7mAODm75esi8EGUhfpf0zTiEkOIFYs0axO3XVJaNAjIzbXbLgEAcOLbQoi1gAPKxpnuJ3O6II9cr8VuDWAmjX9zAFVWwd+Rq0ew7oiURXCFmJADhT8wgVnn/Tncq5HEXPuGHx8NODgQDuUsjlyKUuAjKXonGgJ07M8D1zzx7Avo5LMLpNsY/CXIs6a15PpKusWq0XvQYmX9+91cbLIpOyw== bernardolins@recreio.dcc.ufrj.br
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA3weXjSPfFMNwnqTGfs1oybzfLgcqV8ICKbHz05U4gxlN0ahi3E/GNDCx9Bh9cjHYr62hoASTGuaCKgpar7ZRA4f7Xt+kiYPjpFbOyE++a1hbI484FSRxrF8unKJQB8T69mVb7ybN0y7kxulBwGrhHqJgyXn5+zwS7zMS6HWXnRiZImgK3kvyBNVN9gIorFoGfrmIRvIEWwoRkzFGOmemDVlqpbuN/29WyEmI7P0+TZsA+FRh7N7ww907NXIParwTjUmFo58SXm4uzqIUmhjMiV+JYAqJOY/zPjNi+X+0ib+ZxuD1A1Kla7DeHu/EtmEUD//mukzDNebFV4VYsR7JWQ== jvitor@recreio.dcc.ufrj.br
+
   groups:
     - sudo
     - docker
