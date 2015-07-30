@@ -1,0 +1,29 @@
+#cloud-config
+
+---
+coreos:
+  etcd2:
+    name: olaria
+    advertise-client-urls: http://146.164.41.7:2379
+    initial-advertise-peer-urls: http://146.164.41.7:2380
+    listen-client-urls: http://0.0.0.0:2379
+    listen-peer-urls: http://$private_ipv4:2380
+    discovery: https://discovery.etcd.io/b38caff2c5b18be6758c0c8fa0a08d26
+  fleet:
+    public-ip: 146.164.41.7
+  flannel:
+    interface: 146.164.41.7
+  units:
+  - name: etcd.service
+    command: start
+  - name: fleet.service
+    command: start
+
+users:
+- name: core
+  passwd: $6$rounds=4096$yoPl4RvBFZt$s1cclPwQxYovmXA5ZspiDo28KpqwWovCnXtHjXPG3AHmqtIfTXbIEsLshKNCda6Q/rn5Y3jNSSvIAg6lmDDYs/
+  ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAm++LnW7g31Cwx7q08uOpr6vQ8wUkMBTxRh/QoB3013DJuolERvTW/HgWFqZ5ZcePSi6s9SvcWMJtk0Q3oZV61lM6+o5Pj3OYCGZUJyWGJChTOhGGo6Mfq0GQZCyl3iuK7mAODm75esi8EGUhfpf0zTiEkOIFYs0axO3XVJaNAjIzbXbLgEAcOLbQoi1gAPKxpnuJ3O6II9cr8VuDWAmjX9zAFVWwd+Rq0ew7oiURXCFmJADhT8wgVnn/Tncq5HEXPuGHx8NODgQDuUsjlyKUuAjKXonGgJ07M8D1zzx7Avo5LMLpNsY/CXIs6a15PpKusWq0XvQYmX9+91cbLIpOyw== bernardolins@recreio.dcc.ufrj.br
+  groups:
+    - sudo
+    - docker
