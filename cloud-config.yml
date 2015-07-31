@@ -9,13 +9,13 @@ coreos:
     initial-advertise-peer-urls: http://146.164.41.X:2380
     listen-client-urls: http://0.0.0.0:2379
     listen-peer-urls: http://146.164.41.X:2380
-    discovery: https://discovery.etcd.io/db9b8da3d131f76a41d02bdeb6f68b1e
+    discovery: https://discovery.etcd.io/61e576d9d82a93c94c8b0e7f5630c35e
   fleet:
     public-ip: 146.164.41.X
   flannel:
     interface: 146.164.41.X
   units:
-  - name: etcd.service
+  - name: etcd2.service
     command: start
   - name: fleet.service
     command: start
