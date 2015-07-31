@@ -27,6 +27,16 @@ coreos:
       [Socket]
       ListenStream=22022
       Accept=yes
+  - name: 00-eth0.network
+      runtime: true
+      content: |
+        [Match]
+        Name=eth0
+
+        [Network]
+        DNS=192.168.0.1
+        Address=192.168.0.X/24
+        Gateway=192.168.0.1/24
 
 users:
 - name: operador
