@@ -19,8 +19,10 @@ coreos:
     command: start
   - name: fleet.service
     command: start
+  - name: sshd.service
+    command: stop
   - name: sshd.socket
-    command: restart
+    command: start
     content: |
       [Socket]
       ListenStream=22022
