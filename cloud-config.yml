@@ -9,7 +9,7 @@ coreos:
     initial-advertise-peer-urls: http://1.2.3.4:2380
     listen-client-urls: http://0.0.0.0:2379
     listen-peer-urls: http://1.2.3.4:2380
-    discovery: https://discovery.etcd.io/34d1599659fe4a57cf25b887378a8d9c
+    https://discovery.etcd.io/15a293bf729466a3ad345613585f2ff7
   fleet:
     public-ip: 1.2.3.4
   flannel:
@@ -19,7 +19,7 @@ coreos:
     command: start
   - name: fleet.service
     command: start
-  - name: 00-private.network
+  - name: 00-eth1.network
     runtime: true
     content: |
       [Match]
