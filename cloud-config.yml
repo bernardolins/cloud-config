@@ -5,20 +5,28 @@ hostname: <rename>
 coreos:
   etcd2:
     name: <rename>
-    advertise-client-urls: http://146.164.41.X:2379
-    initial-advertise-peer-urls: http://146.164.41.X:2380
+    advertise-client-urls: http://1.2.3.4:2379
+    initial-advertise-peer-urls: http://1.2.3.4:2380
     listen-client-urls: http://0.0.0.0:2379
-    listen-peer-urls: http://146.164.41.X:2380
-    discovery: https://discovery.etcd.io/f6853ae476302f2c6ca31cd6da8d868a
+    listen-peer-urls: http://1.2.3.4:2380
+    discovery: https://discovery.etcd.io/34d1599659fe4a57cf25b887378a8d9c
   fleet:
-    public-ip: 146.164.41.X
+    public-ip: 1.2.3.4
   flannel:
-    interface: 146.164.41.X
+    interface: 1.2.3.4
   units:
   - name: etcd2.service
     command: start
   - name: fleet.service
     command: start
+  - name: 00-private.network
+    runtime: true
+    content: |
+      [Match]
+      Name=eth1
+
+      [Network]
+      Address=1.2.3.4
   - name: sshd.service
     command: stop
   - name: sshd.socket
@@ -26,8 +34,7 @@ coreos:
     content: |
       [Socket]
       ListenStream=22022
-      Accept=yes
-      
+      Accept=yes      
 users:
 - name: operador
   passwd: $6$rounds=4096$yoPl4RvBFZt$s1cclPwQxYovmXA5ZspiDo28KpqwWovCnXtHjXPG3AHmqtIfTXbIEsLshKNCda6Q/rn5Y3jNSSvIAg6lmDDYs/
