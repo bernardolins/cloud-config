@@ -15,18 +15,28 @@ coreos:
   flannel:
     interface: 1.2.3.4
   units:
+  - name: 00-enp0s25.network
+    runtime: true
+    content: |
+      [Match]
+      Name=enp0s25
+
+      [Network]
+      Address=5.4.3.2/24
+      Gateway=5.4.3.1
+      DNS=5.4.3.1
   - name: etcd2.service
     command: start
   - name: fleet.service
     command: start
-  - name: 00-eth1.network
+  - name: 10-enp4s3.network
     runtime: true
     content: |
       [Match]
-      Name=eth1
+      Name=enp4s3
 
       [Network]
-      Address=1.2.3.4
+      Address=1.2.3.4/24
   - name: sshd.service
     command: stop
   - name: sshd.socket
