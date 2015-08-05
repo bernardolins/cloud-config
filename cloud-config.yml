@@ -9,18 +9,11 @@ coreos:
     initial-advertise-peer-urls: http://1.2.3.4:2380
     listen-client-urls: http://0.0.0.0:2379
     listen-peer-urls: http://1.2.3.4:2380
-    discovery: https://discovery.etcd.io/41353dc948befd0c56e081ff44d5680c
+    discovery: https://discovery.etcd.io/7c1f31f94f0c0b74cf8581be9aa047e1
   fleet:
     public-ip: 1.2.3.4
   flannel:
     interface: 1.2.3.4
-  write_files:
-  - path: /etc/environment
-    permissions: 0644
-    content: |
-      COREOS_PUBLIC_IPV4=1.2.3.4
-      COREOS_PRIVATE_IPV4=1.2.3.4
-      ENVIRONMENT=dev
   units:
   - name: etcd2.service
     command: start
