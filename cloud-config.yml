@@ -9,11 +9,18 @@ coreos:
     initial-advertise-peer-urls: http://1.2.3.4:2380
     listen-client-urls: http://0.0.0.0:2379
     listen-peer-urls: http://1.2.3.4:2380
-    discovery: https://discovery.etcd.io/11d6ca57af5fd61d2fb66236bdcdaa23
+    discovery: https://discovery.etcd.io/41353dc948befd0c56e081ff44d5680c
   fleet:
     public-ip: 1.2.3.4
   flannel:
     interface: 1.2.3.4
+  write_files:
+  - path: /etc/environment
+    permissions: 0644
+    content: |
+      COREOS_PUBLIC_IPV4=1.2.3.4
+      COREOS_PRIVATE_IPV4=1.2.3.4
+      ENVIRONMENT=dev
   units:
   - name: etcd2.service
     command: start
@@ -34,7 +41,7 @@ coreos:
     content: |
       [Socket]
       ListenStream=22022
-      Accept=yes      
+      Accept=yes 
 users:
 - name: operador
   passwd: $6$rounds=4096$yoPl4RvBFZt$s1cclPwQxYovmXA5ZspiDo28KpqwWovCnXtHjXPG3AHmqtIfTXbIEsLshKNCda6Q/rn5Y3jNSSvIAg6lmDDYs/
