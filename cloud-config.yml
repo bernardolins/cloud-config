@@ -2,18 +2,23 @@
 
 ---
 hostname: <rename>
+write-files:
+  - path: /etc/conf.d/nfs
+    permissions: '0644'
+    content: |
+      OPTS_RPC_MOUNTD=""
 coreos:
   etcd2:
     name: <rename>
-    advertise-client-urls: http://1.2.3.4:2379
-    initial-advertise-peer-urls: http://1.2.3.4:2380
+    advertise-client-urls: http://192.168.0.7:2379
+    initial-advertise-peer-urls: http://192.168.0.7:2380
     listen-client-urls: http://0.0.0.0:2379
-    listen-peer-urls: http://1.2.3.4:2380
-    discovery: https://discovery.etcd.io/5cfdb54940d340292f0014d2471d022f
+    listen-peer-urls: http://192.168.0.7:2380
+    discovery: https://discovery.etcd.io/cf3e0c04cfeb6db83f0d14104cf50886
   fleet:
-    public-ip: 1.2.3.4
+    public-ip: 192.168.0.7
   flannel:
-    interface: 1.2.3.4
+    interface: 192.168.0.7
   units:
   - name: 00-enp0s25.network
     runtime: true
@@ -22,11 +27,21 @@ coreos:
       Name=enp0s25
 
       [Network]
-      Address=5.4.3.2/24
-      Gateway=5.4.3.1
-      DNS=5.4.3.1
+      Address=146.164.41.7/24
+      Gateway=146.164.41.1
+      DNS=146.164.41.1
   - name: etcd2.service
     command: start
+  - name: rpc-statd.service
+    command: start
+    enable: true
+  - name: home.mount
+    command: start
+    content: |
+      [Mount]
+      What=maracana.dcc.ufrj.br:/home
+      Where=/home
+      Type=nfs
   - name: fleet.service
     command: start
   - name: 10-enp4s3.network
@@ -36,7 +51,7 @@ coreos:
       Name=enp4s3
 
       [Network]
-      Address=1.2.3.4/24
+      Address=192.168.0.7/24
   - name: sshd.service
     command: stop
   - name: sshd.socket
@@ -48,6 +63,7 @@ coreos:
 users:
 - name: operador
   passwd: $6$rounds=4096$yoPl4RvBFZt$s1cclPwQxYovmXA5ZspiDo28KpqwWovCnXtHjXPG3AHmqtIfTXbIEsLshKNCda6Q/rn5Y3jNSSvIAg6lmDDYs/
+  homedir: /operador
   ssh_authorized_keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAm++LnW7g31Cwx7q08uOpr6vQ8wUkMBTxRh/QoB3013DJuolERvTW/HgWFqZ5ZcePSi6s9SvcWMJtk0Q3oZV61lM6+o5Pj3OYCGZUJyWGJChTOhGGo6Mfq0GQZCyl3iuK7mAODm75esi8EGUhfpf0zTiEkOIFYs0axO3XVJaNAjIzbXbLgEAcOLbQoi1gAPKxpnuJ3O6II9cr8VuDWAmjX9zAFVWwd+Rq0ew7oiURXCFmJADhT8wgVnn/Tncq5HEXPuGHx8NODgQDuUsjlyKUuAjKXonGgJ07M8D1zzx7Avo5LMLpNsY/CXIs6a15PpKusWq0XvQYmX9+91cbLIpOyw== bernardolins@recreio.dcc.ufrj.br
     - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA3weXjSPfFMNwnqTGfs1oybzfLgcqV8ICKbHz05U4gxlN0ahi3E/GNDCx9Bh9cjHYr62hoASTGuaCKgpar7ZRA4f7Xt+kiYPjpFbOyE++a1hbI484FSRxrF8unKJQB8T69mVb7ybN0y7kxulBwGrhHqJgyXn5+zwS7zMS6HWXnRiZImgK3kvyBNVN9gIorFoGfrmIRvIEWwoRkzFGOmemDVlqpbuN/29WyEmI7P0+TZsA+FRh7N7ww907NXIParwTjUmFo58SXm4uzqIUmhjMiV+JYAqJOY/zPjNi+X+0ib+ZxuD1A1Kla7DeHu/EtmEUD//mukzDNebFV4VYsR7JWQ== jvitor@recreio.dcc.ufrj.br
