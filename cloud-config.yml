@@ -14,7 +14,7 @@ coreos:
     initial-advertise-peer-urls: http://192.168.0.7:2380
     listen-client-urls: http://0.0.0.0:2379
     listen-peer-urls: http://192.168.0.7:2380
-    discovery: https://discovery.etcd.io/cf3e0c04cfeb6db83f0d14104cf50886
+    discovery: https://discovery.etcd.io/00657b5460adb408fcb7c27b5625b355
   fleet:
     public-ip: 192.168.0.7
   flannel:
