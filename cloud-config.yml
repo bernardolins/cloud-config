@@ -1,7 +1,7 @@
 #cloud-config
 
 ---
-hostname: caxias
+hostname: macae
 write-files:
   - path: /etc/conf.d/nfs
     permissions: '0644'
@@ -9,16 +9,16 @@ write-files:
       OPTS_RPC_MOUNTD=""
 coreos:
   etcd2:
-    name: caxias
-    advertise-client-urls: http://192.168.0.7:2379
-    initial-advertise-peer-urls: http://192.168.0.7:2380
+    name: macae
+    advertise-client-urls: http://192.168.0.8:2379
+    initial-advertise-peer-urls: http://192.168.0.8:2380
     listen-client-urls: http://0.0.0.0:2379
-    listen-peer-urls: http://192.168.0.7:2380
+    listen-peer-urls: http://192.168.0.8:2380
     discovery: https://discovery.etcd.io/00657b5460adb408fcb7c27b5625b355
   fleet:
-    public-ip: 192.168.0.7
+    public-ip: 192.168.0.8
   flannel:
-    interface: 192.168.0.7
+    interface: 192.168.0.8
   units:
   - name: 00-enp0s25.network
     runtime: true
@@ -27,7 +27,7 @@ coreos:
       Name=enp0s25
 
       [Network]
-      Address=146.164.41.7/24
+      Address=146.164.41.8/24
       Gateway=146.164.41.1
       DNS=146.164.41.1
   - name: etcd2.service
@@ -51,7 +51,7 @@ coreos:
       Name=enp4s3
 
       [Network]
-      Address=192.168.0.7/24
+      Address=192.168.0.8/24
   - name: sshd.service
     command: stop
   - name: sshd.socket
