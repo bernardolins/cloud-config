@@ -1,7 +1,7 @@
 #cloud-config
 
 ---
-hostname: <rename>
+hostname: caxias
 write-files:
   - path: /etc/conf.d/nfs
     permissions: '0644'
@@ -9,7 +9,7 @@ write-files:
       OPTS_RPC_MOUNTD=""
 coreos:
   etcd2:
-    name: <rename>
+    name: caxias
     advertise-client-urls: http://192.168.0.7:2379
     initial-advertise-peer-urls: http://192.168.0.7:2380
     listen-client-urls: http://0.0.0.0:2379
@@ -32,16 +32,16 @@ coreos:
       DNS=146.164.41.1
   - name: etcd2.service
     command: start
+  - name: flanneld.service
+    drop-ins:
+    - name: 50-network-config.conf
+      content: |
+        [Service]
+        ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "10.1.0.0/16" }'
+    command: start
   - name: rpc-statd.service
     command: start
     enable: true
-  - name: home.mount
-    command: start
-    content: |
-      [Mount]
-      What=maracana.dcc.ufrj.br:/home
-      Where=/home
-      Type=nfs
   - name: fleet.service
     command: start
   - name: 10-enp4s3.network
@@ -59,7 +59,22 @@ coreos:
     content: |
       [Socket]
       ListenStream=22022
-      Accept=yes 
+      Accept=yes
+  - name: docker-tcp.socket
+    command: start
+    enable: true
+    content: |
+      [Unit]
+      Description=Docker Socket for the API
+
+      [Socket]
+      ListenStream=2375
+      Service=docker.service
+      BindIPv6Only=both
+
+      [Install]
+      WantedBy=sockets.target
+
 users:
 - name: operador
   passwd: $6$rounds=4096$yoPl4RvBFZt$s1cclPwQxYovmXA5ZspiDo28KpqwWovCnXtHjXPG3AHmqtIfTXbIEsLshKNCda6Q/rn5Y3jNSSvIAg6lmDDYs/
